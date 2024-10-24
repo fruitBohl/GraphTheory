@@ -191,6 +191,8 @@ if __name__ == "__main__":
 
     matrices = [_construct_matrix(sol, x, y) for sol in solutions_mod_q]
 
+    breakpoint()
+
     gl2q = _generate_GL2(q)
     pgl2q = _generate_PGL_from_GL(gl2q, q)
     element_reps = list(pgl2q.keys())
@@ -222,6 +224,12 @@ if __name__ == "__main__":
 
     left = [element_rep_to_number[el] for el in left]
 
-    pos = nx.bipartite_layout(G, nodes=left)
+    spectrum = nx.adjacency_spectrum(G)
+    spectrum = [round(x, 2) for x in spectrum]
+    spectrum.sort(reverse=True)
+    spectrum = [x.real if x.imag == 0 else x for x in spectrum]
+    spectrum = [int(x) if x.is_integer() else x for x in spectrum]
+
+    pos = nx.spring_layout(G)
     nx.draw_networkx_edges(G, pos)
     plt.show()
